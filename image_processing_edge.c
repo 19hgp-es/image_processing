@@ -94,42 +94,6 @@ int max_directional_color(int *path)
 	return result;
 }
 
-// int rgb_processing(Pixel *data, int point1, int point2, int theta){
-// 	long Right, Left;
-// 	switch(theta){
-// 		case 0: case 135: case 45:
-// 		{	Right = 2*data[point1].Red + 3*data[point1].Green + 4*data[point1].Blue;
-// 			Left = 2*data[point2+2].Red + 3*data[point2+2].Green + 4*data[point2+2].Blue;
-// 			return (int)(Right *4 - Left * 4); }
-// 		case 90:
-// 		{	Right = 2*data[point1+1].Red + 3*data[point1+1].Green + 4*data[point1+1].Blue;
-// 			Left = 2*data[point2+1].Red + 3*data[point2+1].Green + 4*data[point2+1].Blue;
-// 			return (int)(Right *4 - Left * 4); }
-// 	}
-// }
-
-// int rgb_processing(Pixel *data[], int point1, int point2, int theta){
-// 	long temp1, temp2;
-// 	switch(theta){
-// 		case 0:
-// 			temp1 = 2*data[point1][point2-1].Red + 3*data[point1][point2-1].Green + 4*data[point1][point2-1].Blue;
-// 			temp2 = 2*data[point1][point2+1].Red + 3*data[point1][point2+1].Green + 4*data[point1][point2+1].Blue;
-
-// 		case 45: 
-// 			temp1 = 2*data[point1+1][point2-1].Red + 3*data[point1+1][point2-1].Green + 4*data[point1+1][point2-1].Blue;
-// 			temp2 = 2*data[point1-1][point2+1].Red + 3*data[point1-1][point2+1].Green + 4*data[point1-1][point2+1].Blue;	
-
-// 		case 90: 
-// 			temp1 = 2*data[point1+1][point2].Red + 3*data[point+1][point2].Green + 4*data[point1+1][point2].Blue;
-// 			temp2 = 2*data[point1-1][point2].Red + 3*data[point1-1][point2].Green + 4*data[point1-1][point2].Blue;		
-
-// 		case 135: 
-// 			temp1 = 2*data[point1+1][point2+1].Red + 3*data[point1+1][point2+1].Green + 4*data[point1+1][point2+1].Blue;
-// 			temp2 = 2*data[point1-1][point2-1].Red + 3*data[point1-1][point2-1].Green + 4*data[point1-1][point2-1].Blue;	
-//  	}
-//  	return (int)(temp1*4 - temp2*4);
-// } 
-
 void pixel_processing_edge(FILE *input, int width, int height, volatile unsigned long *output)
 {
 	int pixel;
@@ -163,7 +127,6 @@ void pixel_processing_edge(FILE *input, int width, int height, volatile unsigned
 		
 	for(i = 1 ; i < height-1 ; i++){
 		for(j = 1 ; j < width-1 ; j++){
-			// moddedValue[0] = rgb_processing(&data[i][j], i, j, 0);
 			temp1 = 2*data[i][j-1].Red + 3*data[i][j-1].Green + 4*data[i][j-1].Blue;
 			temp2 = 2*data[i][j+1].Red + 3*data[i][j+1].Green + 4*data[i][j+1].Blue;
 			moddedValue[0] = 4*temp1 - 4*temp2;
@@ -180,33 +143,12 @@ void pixel_processing_edge(FILE *input, int width, int height, volatile unsigned
 			temp2 = 2*data[i-1][j-1].Red + 3*data[i-1][j-1].Green + 4*data[i-1][j-1].Blue;
 			moddedValue[3] = 4*temp1 - 4*temp2;
 
-
-			// moddedValue[1] = rgb_processing(&data[i][j], i, j, 90);
-			// moddedValue[2] = rgb_processing(&data[i][j], i, j, 135);
-			// moddedValue[3] = rgb_processing(&data[i][j], i, j, 45);
 			temp = max_directional_color(moddedValue);
 			point += temp;
 		}
-	printf("%d\n", i);
+		printf("%d\n", i);
 	}
-	printf("going on...\n");	
-	// for( k = 0; k < num; k++){
-	// 	if(k+width < num){
-	// 		moddedValue[0] = rgb_processing(&data[k], k+width, k+width, 0); // 0
-	// 	}else{
-	// 		moddedValue[0] = 0;
-	// 	}
-	// 	if(k+2*width < num){
-	// 		moddedValue[1] = rgb_processing(&data[k], k, k+2*width, 90); // 90
-	// 		moddedValue[2] = rgb_processing(&data[k], k+2*width, k, 135); // 135
-	// 		moddedValue[3] = rgb_processing(&data[k], k, k+2*width, 45); // 45
-	// 	}else{
-	// 		moddedValue[1] = moddedValue[2] = moddedValue[3] = 0;
-	// 	}
-	// 	temp = max_directional_color(moddedValue);
-	// 	printf("Max_Value[%d] : %d\n",k, temp);
-	// 	point += temp;
-	// }
+	printf("going on...\n");
 
 	// threshold value T = 1.2t which is selected
 	int point_value = (int)(point/num * 1);
